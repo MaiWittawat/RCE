@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+  # MySQL
+  mysql_db:
+    image: mysql:latest
+    container_name: mysql_db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root # กำหนด user ของ root mysql
+      MYSQL_DATABASE: exec_code_mysql # กำหนด database เริ่มต้นของ mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # Mongo
+  mongo_db:
+    image: mongo:latest
+    container_name: mongo_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  # Phpmyadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql_db # ระบุ host ที่จะให้ phpmyadmin ไปจัดการ ซึ่งสามารถใส่เป็นชื่อ container name (mysql_db) ได้เลย
+      PMA_PORT: 3306 # ระบุ port ของ Database
+      PMA_USER: root # ระบุ user ของ Database
+      PMA_PASSWORD: root # ระบุ password ของ Database
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql_db
+
+volumes:
+  mysql_data:
+  mongo_data:
