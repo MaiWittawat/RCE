@@ -13,14 +13,16 @@
 
 ```sql
 CREATE TABLE users (
-    id INT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     role VARCHAR(25) DEFAULT 'USER' NOT NULL,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    sex BOOLEAN NOT NULL
-    status BOOLEAN DEFAULT 1
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sex BOOLEAN NOT NULL,
+    status BOOLEAN DEFAULT 1,
+    resetToken VARCHAR(255) DEFAULT NULL;
+    resetTokenExpiry DATETIME DEFAULT NULL;
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
@@ -40,7 +42,7 @@ CREATE TABLE problems (
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     difficulty ENUM('easy', 'medium', 'hard') NOT NULL,
-    created_by INT,
+    created_by VARCHAR(36),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 );

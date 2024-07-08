@@ -59,6 +59,5 @@ app.get('/hello', (req, res)=>{
 app.use('/api', API_ROUTER)
 
 app.listen(port, async ()=>{
-    await connectToMysqlDB()
     console.log(`Server is running on port ${port}`)
 })
