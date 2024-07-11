@@ -40,6 +40,19 @@ services:
     depends_on:
       - mysql_db
 
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: execcode_user
+      RABBITMQ_DEFAULT_PASS: execcode_password
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
 volumes:
   mysql_data:
   mongo_data:
+  rabbitmq_data:
