@@ -107,6 +107,16 @@ async function getUserByResetToken(resetToken) {
     }
 }
 
+async function compareUser(email, id){
+    const conn = await pool.getConnection();
+    try {
+        const [result] = await conn.query('SELECT email FROM users WHERE id = ?', [id]);
+        return result.length > 0 && result[0].email === email;
+    } finally {
+        conn.release();
+    }
+}
+
 
 module.exports = {
     getUsers,
@@ -118,4 +128,5 @@ module.exports = {
     getUserByEmail,
     saveResetToken,
     getUserByResetToken,
+    compareUser,
 }

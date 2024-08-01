@@ -1,0 +1,27 @@
+// Get all users with Redis caching
+router.get('/users', async (req, res) => {
+    try {
+        const cacheKey = 'users';
+        
+        client.get(cacheKey, async (err, data) => {
+            if (err) throw err;
+
+            if (data) {
+                // ส่งกลับข้อมูลจาก Redis cache
+                return res.status(200).json(JSON.parse(data));
+            } else {
+                // ถ้าไม่มีใน Redis cache ให้ดึงข้อมูลจากฐานข้อมูล
+                const users = await User.getUsers();
+
+                // เก็บข้อมูลใน Redis cache พร้อมตั้งค่าเวลาหมดอายุ
+                client.setex(cacheKey, 3600, JSON.stringify(users)); // เก็บข้อมูลใน Redis เป็นเวลา 1 ชั่วโมง
+
+                // ส่งกลับข้อมูลจากฐานข้อมูล
+                res.status(200).json(users);
+            }
+        });
+    } catch (err) {
+        console.error(`Error fetching users: ${err}`);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});

@@ -26,7 +26,7 @@ services:
     ports:
       - "27017:27017"
 
-  # Phpmyadmin
+  # Phpmyadmin  
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin

@@ -57,6 +57,16 @@ async function deleteProblem(problemId) {
     }
 }
 
+async function getProblemByUserId(userId){
+    const conn = await pool.getConnection()
+    try {
+        const [results] = await conn.query("SELECT * FROM problems WHERE created_by = ?", [userId])
+        return results
+    } finally {
+        conn.release()
+    }
+}
+
 
 module.exports = {
     getProblems,
@@ -64,5 +74,6 @@ module.exports = {
     createProblem,
     updateProblem,
     deleteProblem,
+    getProblemByUserId,
 }
 
